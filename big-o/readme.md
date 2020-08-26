@@ -49,6 +49,7 @@ This workshop is comprised of three sections:
 * Define the most common complexity classes (see above).
     * Mini-Exercise: as pairs, order the complexity classes from fast to slow.
 * Two worked examples as a class.
+* See [lecture-notes](lecture-notes.md) for more details.
 
 ### Part 2: Classifying Programs Into Their Complexity Class (60 minutes)
 

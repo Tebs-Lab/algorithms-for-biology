@@ -1,4 +1,4 @@
-## Big O & Complexity Theory (30 minutes)
+# Big O & Complexity Theory (30 minutes)
 
 * Complexity theory is a branch of computer science that focuses on measuring the performance of algorithms.
   * Complexity is an *abstract* measurement, not a concrete measurement...
