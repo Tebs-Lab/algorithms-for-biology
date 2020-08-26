@@ -16,7 +16,6 @@ def unique_kmers(genome, k):
     final_kmer_position = len(genome) - k + 1
     
     for start_position in range(final_kmer_position):
-        # Hint: Consider this line carefully... 
         kmer = genome[start_position:start_position + k]
         
         # Looping to check if this kmer is already in the list
