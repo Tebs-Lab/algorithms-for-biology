@@ -1,4 +1,4 @@
-# Big O & Complexity Theory (30 minutes)
+# Big O & Complexity Theory (15-20 minutes)
 
 * Complexity theory is a branch of computer science that focuses on measuring the performance of algorithms.
   * Complexity is an *abstract* measurement, not a concrete measurement...
@@ -34,7 +34,7 @@
   * It's often worth knowing what your actual dataset is, and computing big O over that case.
   * Big O is a "general" tool -- getting more specific by actually measuring your code's performance is a good idea.
 
-## Class Exercise 1 -- Order Complexity Classes
+## Class Exercise 1 -- Order Complexity Classes (10 minutes)
 
 * __Individually__
   * Put the following complexity classes in order from slowest to fastest
@@ -51,38 +51,100 @@
   * *Usually n^2 is "okay" and 2^n is almost always unacceptable*
   * *but it depends on the problem and your specific requirements!*
 
-## Class Exercise 2 -- Modeling "Joins"
+## A Note About Using Built-In Methods (5 minutes)
 
-* __What is a database join?__
-  * *A way of combining two tables based on a shared piece of data*
-  * *If the class doesn't have a strong idea, it's okay to go into more details*
-* __Assume we have two tables with a shared key (draw a representation)__
-  * For each of the following situations have the students define an algorithm to compute the join and define the big O speed of that algorithm.
-  * encourage students to "get the idea" of the algorithm, not the code or even pseudo code.
-  * Give the answers 1 by 1 with the class
+* A single line of code — especially a function call — might actually involve a lot of work. 
+* Consider the case of searching for an item in a list vs searching for an item in a hash table
+  * *If students aren't familiar with the inner workings of a hashmap/dictionary take a minute and explain it*
+* The main point is: be careful when using built in methods and handy syntactical sugar, it might be hiding a lot of complexity.
 
-1. If we cannot sort either of the tables or use any external data structures, how can we join these tables? What's the big o?
-  * O(a*b), which is "essentially" O(n^2)
-2. What if we sort the right table?
-  * What is the cost of sorting (reveal this as n log n where n=size of the right table)
-  * How can we do better than the above brute force?
-    * *apply binary search*
-  * So we get `O(b log b + a log b)`; `b log b` is the cost of sorting table b, then for each item in table a we perform a binary search over table b, which is the `a log b` part
-  * How can we tell if we SHOULD do the sort?
-    * `(b log b + a log b < a*b)`
-    * If b is very small, it's not worth it, but our database program can just do this comparison in constant time if the sizes of the tables are known.
-3. What if we sort both tables?
-  * What is the cost of sorting?
-    * `a log a + b log b`
-  * What is the best algorithm we can think of?
-    * sort merge join:
-      * set a pointer at the start of each sorted table.
-      * advance the pointer on table b until the value is larger than the one at the pointer for table a.
-      * advance the pointer on table a one place.
-      * repeat the previous two steps until we're done.
-    * We look at every item in the two tables exactly once: `a+b` (plus the cost of sorting both tables)
-  * How can we tell if we SHOULD do the sort?
-4. What if we can use an external hash table?
-  * Whats the algorithm? (hash join -- hash entries in table b then join to the hash)
-  * Whats the big O? O(a+b)
-  * *This algorithm pays a storage cost for building the hash table -- a classic tradeoff between storage and speed*
+## Three Worked Examples (10 minutes)
+
+* Lets look at two examples. 
+  * *Both of these are intentionally straight-forward, the exercises are a bit harder so warn students about that.*
+
+* The classic example of "linear" O(n) is searching for something in an unsorted list
+  * Searching for a character in a string is essentially the same algorithm.
+  * But searching for a substring in a string is a different story... [this is in the exercise so you may not want to give it away!]
+
+```python
+def linear_search(input_list, item_of_interest):
+    for index, item in enumerate(input_list):
+        if item == item_of_interest:
+          return index
+    
+    return -1 # -1 means "item_of_interest is not in this list"
+```
+
+* Note that the "best case" is constant time:
+  * The `input_list` is empty, or the `item_of_interest` is in the first position of the list.
+  * But we have no way of knowing that's true...
+  * Worst case is when the item isn't in the list. 
+  * Could argue this is: 2n. 
+    * Loading the item from the list, then comparing it to the item or interest. 
+    * No setup, so no constants...
+
+* A classic example of a 2nd degree polynomial (n^2) is this method of determining which items are unique:
+
+```python
+def get_unique_items(input_list):
+    unique_items = []
+    
+    for outer_item in list_one:
+        outer_item_is_unique = True
+        
+        for inner_item in unique_items:
+            if inner_item == outer_item:
+                outer_item_is_unique = False
+                break
+    
+        if outer_item_is_unique:
+            unique_items.append(outer_item)
+        
+    return unique_items
+```
+
+* This has a but of setup/teardown, I would argue a fair accounting is: 2 + 4n + 2n^2
+    * 2 => create the array and return
+    * 4n => load data into `outer_item`, set `outer_item_is_unique = True`, handle lower if statement, append the item.
+    * 2n^2 => load data into `inner_item`, handle innermost if statement.
+      * I don't count setting outer_item_is_unique = False or break because they'll each happen at most n times. 
+      * You could reasonably argue that we should add these into the linear count and make 4n into 6n instead.
+      * But Big O is an estimate anyway and we're going to drop the constants so... it's all O(n^2) at the end of the day. 
+
+
+* The classic log(n) example is "binary search".
+  * The algorithm is a lot easier to read and understand than the code, so describe this in the abstract.
+  * *I like to tell students they already know this algorithm... say I told you that I'm thinking of a number between 1-100, and that they'll get 10 guesses to figure out which number I'm thinking of, and after each guess I'll tell you if the guess was too low or too high... what do you guess?* 
+    * Someone always says "50", ask them why, and they'll describe the key insight of binary search to the class. 
+  * this is log(n) because each guess reduces the search space by half, so we can say more specifically even, it's 'log base 2 of n' although people rarely report the base of the log.
+    * Which I personally find strange... we care about the difference between n^2 and n^10, so why not log base 2 vs log base 10? 
+      * There are some okay reasons, but still it's food for thought...
+
+* **Crucial note, we are assuming `input_list` is sorted.**
+```python
+def binary_search(input_list, item_of_interest): 
+    low = 0
+    high = len(input_list) - 1
+    mid = 0
+  
+    while low <= high: 
+  
+        mid = (high + low) // 2
+  
+        
+        # If item_of_interest is greater, ignore left half 
+        if input_list[mid] < item_of_interest: 
+            low = mid + 1
+  
+        # If item_of_interest is smaller, ignore right half 
+        elif input_list[mid] > item_of_interest: 
+            high = mid - 1
+
+        # Check if item_of_interest is present at mid 
+        else: 
+            return mid 
+  
+    # If we reach here, then the element was not present 
+    return -1
+```
