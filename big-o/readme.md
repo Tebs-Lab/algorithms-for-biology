@@ -78,5 +78,57 @@ Q&A **(10 minutes)**
 
 There are a variety of similar websites for general programming practice as well: [Code Wars](https://www.codewars.com/), [Hacker Rank](https://www.hackerrank.com/), and [Leet Code](https://leetcode.com/) all have a variety of problems and measure the speed of submitted programs in one way or another. However
 
- 
+## Testing The Code:
 
+Tests for the provided code are in `solutions/tests.py`. These tests use the built in Python UnitTest library and can be run by executing that file with python:
+
+```
+python tests.py
+```
+
+> If you're not in the solution directory, you'll have to specify the full path to the `tests.py` file
+
+Or, they can be run by invoking the unittest module from anywhere above the solutions folder in the hierarchy:
+
+```
+python -m unittest
+```
+
+Students can use these tests to test their own code by changing which functions get imported. For example, say a student wants to change the code in `exercises/optimize_functions_code.py` to complete the optimization exercise. Then this student could change the imports as follows:
+
+```python
+from exercises.classify_functions_code import reverse_compliment, count_occurance, unique_kmers, count_kmers
+
+# Change the following line from solutions.optimize_functions_code to exercises.optimize_functions_code
+from solutions.optimize_functions_code import unique_kmers as optimized_unique_kmers, count_kmers as optimized_count_kmers
+from solutions.find_kmer_clumps_code import clumping_kmers
+```
+
+Similarly, suppose a student adds a python file called `kmer_clumps.py` the the exercises folder to complete the final exercise. Then:
+
+```python
+from exercises.classify_functions_code import reverse_compliment, count_occurance, unique_kmers, count_kmers
+from solutions.optimize_functions_code import unique_kmers as optimized_unique_kmers, count_kmers as optimized_count_kmers
+
+# Change this line from solutions.find_kmer_clumps_code to exercises.kmer_clumps
+from solutions.find_kmer_clumps_code import clumping_kmers
+```
+### A Final Word About Tests:
+
+There are less involved ways for students to test their code that don't rely on understanding the unit test code. For example, they could copy the test cases and run them manually at the bottom of their own code. For example, consider this quick and dirty way of testing `reverse_complement`:
+
+```python
+        cases = [
+            ('', ''),
+            ('A', 'T'),
+            ('T', 'A'),
+            ('C', 'G'),
+            ('G', 'C'),
+            ('ATCG', 'CGAT')
+        ]
+
+        for sequence, expected_result in cases:
+            result = reverse_compliment(sequence)
+            if result != expected_result:
+                print("Failed test (expected, actual)", expected_result, result)
+```

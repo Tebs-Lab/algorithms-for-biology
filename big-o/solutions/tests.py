@@ -6,7 +6,7 @@ import os
 dirname = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 sys.path.append(dirname)
 
-from exercises.classify_functions_code import reverse_compliment, count_occurance
+from exercises.classify_functions_code import reverse_compliment, count_occurance, unique_kmers, count_kmers
 from solutions.optimize_functions_code import unique_kmers as optimized_unique_kmers, count_kmers as optimized_count_kmers
 from solutions.find_kmer_clumps_code import clumping_kmers
 
@@ -57,18 +57,57 @@ class TestGenomeFunctions(unittest.TestCase):
             failure_message = f'Failed on input genome: {genome}, pattern: {pattern}, expected result: {expected_result}, actual_result: {result}'
             self.assertEqual(result, expected_result, failure_message)
 
+
     def test_unique_kmers(self):
         '''
         This function takes in a string representing the genome of an
         organism (or section of a genome) and an integer value k. It 
         returns a list of all the unique substrings of length k
         (often called k-mers) contained in that genome.
-
-        But the runtime is simply O(GK), and is completely independent of 
-        the value U (the number of unique k-mers)
         '''
-        pass
-        # genome, k
+        cases = [
+            ('A', 1, ['A']),
+            ('T', 1, ['T']),
+            ('C', 1, ['C']),
+            ('G', 1, ['G']),
+            ('ATCG', 1, ['A', 'T', 'C', 'G']),
+            ('ATCG', 2, ['AT', 'TC', 'CG']),
+            ('ATCG', 3, ['ATC', 'TCG']),
+            ('ATCG', 4, ['ATCG']),
+            ('AAATTTCCCGGG', 2, ['AA', 'AT', 'TT', 'TC', 'CC', 'CG', 'GG'])
+        ]
+
+
+        for genome, k, expected_kmers in cases:
+            kmers = unique_kmers(genome, k)
+            failure_message = f'Failed on input genome: {genome}, k: {k}. Expected: {expected_kmers} Actual: {kmers}.'
+            self.assertEqual(kmers, expected_kmers, failure_message)
+
+
+    def test_optimized_unique_kmers(self):
+        '''
+        This function takes in a string representing the genome of an
+        organism (or section of a genome) and an integer value k. It 
+        returns a list of all the unique substrings of length k
+        (often called k-mers) contained in that genome.
+        '''
+        cases = [
+            ('A', 1, ['A']),
+            ('T', 1, ['T']),
+            ('C', 1, ['C']),
+            ('G', 1, ['G']),
+            ('ATCG', 1, ['A', 'T', 'C', 'G']),
+            ('ATCG', 2, ['AT', 'TC', 'CG']),
+            ('ATCG', 3, ['ATC', 'TCG']),
+            ('ATCG', 4, ['ATCG']),
+            ('AAATTTCCCGGG', 2, ['AA', 'AT', 'TT', 'TC', 'CC', 'CG', 'GG'])
+        ]
+
+
+        for genome, k, expected_kmers in cases:
+            kmers = optimized_unique_kmers(genome, k)
+            failure_message = f'Failed on input genome: {genome}, k: {k}. Expected: {expected_kmers} Actual: {kmers}.'
+            self.assertEqual(kmers, expected_kmers, failure_message)
 
 
     def test_count_kmers(self):
@@ -77,19 +116,55 @@ class TestGenomeFunctions(unittest.TestCase):
         and an integer k. It returns a dictionary which maps
         each occurring k-mer to the number of times that k-mer
         occurs within the genome.
-
-        Instead of finding the unique k-mers and then counting them
-        one by one, we just look at the genome once and keep a running
-        count of ALL the k-mers at the same time!
-
-        Note that it is almost identical to the above function!
         '''
-        pass
-        # genome, k
+        cases = [
+            ('A', 1, {'A': 1}),
+            ('T', 1, {'T': 1}),
+            ('C', 1, {'C': 1}),
+            ('G', 1, {'G': 1}),
+            ('ATCG', 1, {'A': 1, 'T': 1, 'C': 1, 'G': 1}),
+            ('ATCG', 2, {'AT': 1, 'TC': 1, 'CG': 1}),
+            ('ATCG', 3, {'ATC': 1, 'TCG': 1}),
+            ('ATCG', 4, {'ATCG': 1}),
+            ('AAATTTCCCGGG', 2, {'AA': 2, 'AT': 1, 'TT': 2, 'TC': 1, 'CC': 2, 'CG': 1, 'GG': 2})
+        ]
+
+
+        for genome, k, expected_kmer_counts in cases:
+            kmer_counts = count_kmers(genome, k)
+            failure_message = f'Failed on input genome: {genome}, k: {k}. Expected: {expected_kmer_counts} Actual: {kmer_counts}.'
+            self.assertEqual(kmer_counts, expected_kmer_counts, failure_message)
     
+    def test_optimized_count_kmers(self):
+        '''
+        This function accepts a string representing a genome
+        and an integer k. It returns a dictionary which maps
+        each occurring k-mer to the number of times that k-mer
+        occurs within the genome.
+        '''
+        cases = [
+            ('A', 1, {'A': 1}),
+            ('T', 1, {'T': 1}),
+            ('C', 1, {'C': 1}),
+            ('G', 1, {'G': 1}),
+            ('ATCG', 1, {'A': 1, 'T': 1, 'C': 1, 'G': 1}),
+            ('ATCG', 2, {'AT': 1, 'TC': 1, 'CG': 1}),
+            ('ATCG', 3, {'ATC': 1, 'TCG': 1}),
+            ('ATCG', 4, {'ATCG': 1}),
+            ('AAATTTCCCGGG', 2, {'AA': 2, 'AT': 1, 'TT': 2, 'TC': 1, 'CC': 2, 'CG': 1, 'GG': 2})
+        ]
+
+
+        for genome, k, expected_kmer_counts in cases:
+            kmer_counts = optimized_count_kmers(genome, k)
+            failure_message = f'Failed on input genome: {genome}, k: {k}. Expected: {expected_kmer_counts} Actual: {kmer_counts}.'
+            self.assertEqual(kmer_counts, expected_kmer_counts, failure_message)
 
     def test_clumping_kmers(self):
         '''
+        NOTE: These test cases come from http://bioinformaticsalgorithms.com/data/debugdatasets/replication/ClumpFindingProblem.pdf
+              and there are helpful descriptions in that document of what each case tests for.
+
         This function finds clusters of k-mers in a genome.
 
         * Accepts as input:
@@ -105,9 +180,17 @@ class TestGenomeFunctions(unittest.TestCase):
                 * In reality, we could map this window to all the positions `[0, 1, 2]` — but all of these positions contain the SAME cluster, and the most relevant of those positions is `2` because it is the start of the first copy of our k-mer `'ATG'`. 
                     * Including positions 0 and 1 in our solution would be both redundant and less useful in subsequent analysis. 
         '''
-        pass
-        # genome, kmer_length, window_length, min_kmer_count
-
+        cases = [
+            ('CGGACTCGACAGATGTGAAGAACGACAATGTGAAGACTCGACACGACAGAGTGAAGAGAAGAGGAAACATTGTAA', 5, 50, 4, {'CGACA': [6], 'GAAGA': [16]}), 
+            ('AAAACGTCGAAAAA', 2, 4, 2, {'AA': [0, 1, 9, 10, 11]}), 
+            ('ACGTACGT', 1, 5, 2, {'A': [0], 'C': [1], 'G': [2], 'T': [3]}), 
+            ('CCACGCGGTGTACGCTGCAAAAAGCCTTGCTGAATCAAATAAGGTTCCAGCACATCCTCAATGGTTTCACGTTCTTCGCCAATGGCTGCCGCCAGGTTATCCAGACCTACAGGTCCACCAAAGAACTTATCGATTACCGCCAGCAACAATTTGCGGTCCATATAATCGAAACCTTCAGCATCGACATTCAACATATCCAGCG', 3, 25, 3, {'CCA': [78, 100], 'AAA': [18, 19], 'GCC': [77], 'TTC': [65], 'CAG': [92], 'CAT': [178]}), 
+        ]
+        
+        for genome, k, window_length, min_count, expected_clumps in cases:
+            clumps = clumping_kmers(genome, k, window_length, min_count)
+            failure_message = f'Failed on input G: {genome}, k: {k}, window_length: {window_length}, min_count: {min_count}. Expected: {expected_clumps}, actual: '
+            self.assertEqual(clumps, expected_clumps)
 
 if __name__ == "__main__":
     unittest.main()

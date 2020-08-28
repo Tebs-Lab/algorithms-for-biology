@@ -33,21 +33,24 @@ def clumping_kmers(genome, kmer_length, window_length, min_kmer_count):
 
         cluster_window_start_points = []
         
-        start_pos = 0
-        start_val = locations[start_pos]
-        for end_pos in range(0, len(locations)):
-            end_val = locations[end_pos]
+        for location_start_index in range(0, len(locations)):
+            window_start_location = locations[location_start_index]
 
-            # advance the start position until it's
-            # within window_length of the end pos
-            while (end_val + kmer_length) - start_val >= window_length:
-                start_pos += 1
-                start_val = locations[start_pos]
+            # Iteratively check if the next kmer is within the window length and expand the window
+            # until we reach the end of the match locations or the kmer falls outside the window
+            for location_end_index in range(location_start_index, len(locations)):
+                current_match_end_position = locations[location_end_index] + kmer_length
+                
+                # If the current match is outside the window, go back one location and stop.
+                if (current_match_end_position - window_start_location) > window_length:
+                    location_end_index -= 1
+                    break
 
             # if there are at least min_kmer_count in this window
             # it's a candidate
-            if (end_pos - start_pos) + 1 > min_kmer_count:
-                cluster_window_start_points.append(start_val) 
+            matches_within_window = (location_end_index - location_start_index) + 1
+            if matches_within_window >= min_kmer_count:
+                cluster_window_start_points.append(window_start_location) 
 
         # If we found at least one window for this kmer, add them.
         if len(cluster_window_start_points) > 0:

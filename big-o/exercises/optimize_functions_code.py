@@ -52,7 +52,7 @@ def count_kmers(genome, k):
         
         # Loop over the full genome searching for this kmer
         stop_position = len(genome) - k + 1
-        for i in range(stop_position):
+        for start_position in range(stop_position):
             inner_kmer = genome[start_position:start_position + k]
             
             if inner_kmer == kmer:

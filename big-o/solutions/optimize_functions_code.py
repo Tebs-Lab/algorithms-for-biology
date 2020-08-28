@@ -14,10 +14,11 @@ def unique_kmers(genome, k):
     for start_position in range(final_kmer_position):
         kmer = genome[start_position:start_position + k]
 
-        if kmer in kmers:
-            kmers[kmer] = True
+        # We don't even need to check if it's in there or not.
+        # If it is, it'll stay true, of it's not it will become true.
+        kmers[kmer] = True
     
-    return kmers.keys()
+    return list(kmers.keys())
 
 
 def count_kmers(genome, k):
