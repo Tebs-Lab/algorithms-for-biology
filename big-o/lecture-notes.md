@@ -83,6 +83,7 @@ def linear_search(input_list, item_of_interest):
   * Could argue this is: 2n. 
     * Loading the item from the list, then comparing it to the item or interest. 
     * No setup, so no constants...
+  * Which means, overall this is O(n) (remember: we always drop the constants with Big O)
 
 * A classic example of a 2nd degree polynomial (n^2) is this method of determining which items are unique:
 
@@ -111,6 +112,7 @@ def get_unique_items(input_list):
       * I don't count setting outer_item_is_unique = False or break because they'll each happen at most n times. 
       * You could reasonably argue that we should add these into the linear count and make 4n into 6n instead.
       * But Big O is an estimate anyway and we're going to drop the constants so... it's all O(n^2) at the end of the day. 
+    * Therefore overall O(n^2)
 
 
 * The classic log(n) example is "binary search".
@@ -121,7 +123,7 @@ def get_unique_items(input_list):
     * Which I personally find strange... we care about the difference between n^2 and n^10, so why not log base 2 vs log base 10? 
       * There are some okay reasons, but still it's food for thought...
 
-* **Crucial note, we are assuming `input_list` is sorted.**
+* **Crucial note, we are assuming `input_list` is sorted, otherwise this algorithm does not work.**
 ```python
 def binary_search(input_list, item_of_interest): 
     low = 0
