@@ -84,3 +84,10 @@ test_that("count_kmers works", {
     contents_identical(as.list(count_kmers('ATCG', 4)), as.list(hash('ATCG' = 1)))
     contents_identical(as.list(count_kmers('AAATTTCCCGGG', 2)), as.list(hash('AA' = 2, 'AT' = 1, 'TT' = 2, 'TC' = 1, 'CC' = 2, 'CG' = 1, 'GG' = 2)))
 })
+
+test_that("clumping_kmers works", {
+    contents_identical(as.list(clumping_kmers('CGGACTCGACAGATGTGAAGAACGACAATGTGAAGACTCGACACGACAGAGTGAAGAGAAGAGGAAACATTGTAA', 5, 50, 4)), as.list(hash('CGACA' = list(7), 'GAAGA' =  list(17))))
+    contents_identical(as.list(clumping_kmers('AAAACGTCGAAAAA', 2, 4, 2)), as.list(hash('AA' = list(1, 2, 10, 11, 12))))
+    contents_identical(as.list(clumping_kmers('ACGTACGT', 1, 5, 2)), as.list(hash('A' =  list(1), 'C' =  list(2), 'G' =  list(3), 'T' =  list(4))))
+    contents_identical(as.list(clumping_kmers('CCACGCGGTGTACGCTGCAAAAAGCCTTGCTGAATCAAATAAGGTTCCAGCACATCCTCAATGGTTTCACGTTCTTCGCCAATGGCTGCCGCCAGGTTATCCAGACCTACAGGTCCACCAAAGAACTTATCGATTACCGCCAGCAACAATTTGCGGTCCATATAATCGAAACCTTCAGCATCGACATTCAACATATCCAGCG', 3, 25, 3)), as.list(hash('CCA' =  list(78, 100), 'AAA' =  list(18, 19), 'GCC' =  list(77), 'TTC' =  list(65), 'CAG' =  list(92), 'CAT' =  list(178)))) 
+})
