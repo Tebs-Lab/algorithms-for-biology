@@ -91,7 +91,7 @@ def linear_search(input_list, item_of_interest):
 def get_unique_items(input_list):
     unique_items = []
     
-    for outer_item in list_one:
+    for outer_item in input_list:
         outer_item_is_unique = True
         
         for inner_item in unique_items:

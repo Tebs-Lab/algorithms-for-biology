@@ -76,7 +76,7 @@ Q&A **(10 minutes)**
 
 [Rosalind](http://rosalind.info/) is a website designed to help people learn and practice programming specific to bioinformatics. In this workshop you've seen solutions to some of [the problems](http://rosalind.info/problems/list-view/) hosted there, but there are many many more. While Rosalind does not measure the speed or Big O of your solutions, you can apply what you've learned here to these problems on your own!
 
-There are a variety of similar websites for general programming practice as well: [Code Wars](https://www.codewars.com/), [Hacker Rank](https://www.hackerrank.com/), and [Leet Code](https://leetcode.com/) all have a variety of problems and measure the speed of submitted programs in one way or another. However
+There are a variety of similar websites for general programming practice as well: [Code Wars](https://www.codewars.com/), [Hacker Rank](https://www.hackerrank.com/), and [Leet Code](https://leetcode.com/) all have a variety of problems and measure the speed of submitted programs in one way or another.
 
 ## Testing The Code:
 
